@@ -76,6 +76,7 @@ GEM
     slop (3.6.0)
     systemu (2.6.4)
     uuidtools (2.1.5)
+    vagrant (1.5.0)
     wmi-lite (1.0.0)
 
 PLATFORMS
@@ -84,3 +85,4 @@ PLATFORMS
 DEPENDENCIES
   chef (~> 12.0.3)
   knife-solo (~> 0.4.2)
+  vagrant (~> 1.5.0)
