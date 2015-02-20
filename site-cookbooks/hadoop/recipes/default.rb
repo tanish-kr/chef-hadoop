@@ -1,32 +1,22 @@
-# 1. JDK rpm package setting
-cookbook_file node['java']['package_name'] do
-  path "#{node['java']['src']}#{node['java']['package_name']}"
-#  source node['java']['package_name']
-  mode 0744
-  action :create_if_missing
+# 1. java install
+%W(
+  java-#{node['java']['version']}-openjdk
+  java-#{node['java']['version']}-openjdk-devel
+  java-#{node['java']['version']}-openjdk-src
+).each do |package_name|
+  package package_name do
+    action :install
+  end
 end
 
 # 2. hadoop rpm package setting
-cookbook_file node['hadoop']['package_name'] do
-  path "#{node['hadoop']['src']}#{node['hadoop']['package_name']}"
-#  source node['hadoop']['package_name']
-  mode 0744
-  action :create_if_missing
-end
-
-# 3. JDK install
-#%W(
-#  java-#{node['java']['version']}-openjdk
-#  java-#{node['java']['version']}-openjdk-devel
-#  java-#{node['java']['version']}-openjdk-headless
-#).each do |package_name|
-  #package package_name do
-  package "java" do
-    action :install
-    source "#{node['java']['src']}#{node['java']['package_name']}"
-    provider Chef::Provider::Package::Rpm
-  end
+#cookbook_file node['hadoop']['package_name'] do
+#  path "#{node['hadoop']['src']}#{node['hadoop']['package_name']}"
+##  source node['hadoop']['package_name']
+#  mode 0744
+#  action :create_if_missing
 #end
+
 
 # 2. hadoop add repos install
 #bash "hadoop_install" do
@@ -40,27 +30,35 @@ end
 #end
 
 # 4. hadoop install
-%w(hadoop hadoop-conf-pseudo).each do |package_name|
-  package package_name do
-    action :install
-    source "#{node['hadoop']['src']}#{node['hadoop']['package_name']}"
-    provider Chef::Provider::Package::Rpm
-  end
-end
-# 4. hadoop start
-%w(
-    hadoop-datanode
-    hadoop-jobtracker
-    hadoop-namenode
-    hadoop-secondarynamenode
-    hadoop-tasktracker
-).each do |service_name|
-    service service_name do
-        action [ :enable, :start ]
-        supports :start => true, :stop => true, :restart => true
-    end
-end
+#%w(hadoop hadoop-conf-pseudo).each do |package_name|
+#  package package_name do
+#    action :install
+#    source "#{node['hadoop']['src']}#{node['hadoop']['package_name']}"
+#    provider Chef::Provider::Package::Rpm
+#  end
+#end
+## 4. hadoop start
+#%w(
+#    hadoop-datanode
+#    hadoop-jobtracker
+#    hadoop-namenode
+#    hadoop-secondarynamenode
+#    hadoop-tasktracker
+#).each do |service_name|
+#    service service_name do
+#        action [ :enable, :start ]
+#        supports :start => true, :stop => true, :restart => true
+#    end
+#end
 # 5. enviroment variable
+template ".bash_profile" do
+  source "bash_profile.erb"
+  path "/home/#{node['hadoop']['user']}/.bash_profile"
+  mode '0644'
+  owner node['hadoop']['user']
+  group node['hadoop']['group']
+  not_if "grep JAVA_HOME /home/#{node['hadoop']['user']}/.bash_profile"
+end
 # 6. xml attachment
 
 # 7.hadoop auto start

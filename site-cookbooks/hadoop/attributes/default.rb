@@ -7,3 +7,5 @@ default['java']['home'] = '/usr/local/java/'
 # hadoop attributes
 default['hadoop']['package_name'] = 'cloudera-cdh-5-0.x86_64.rpm'
 default['hadoop']['src'] = '/usr/local/src/'
+default['hadoop']['user'] = 'vagrant'
+default['hadoop']['group'] = 'vagrant'
