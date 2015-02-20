@@ -5,7 +5,11 @@ default['java']['src'] = '/usr/local/src/'
 default['java']['home'] = '/usr/local/java/'
 
 # hadoop attributes
-default['hadoop']['package_name'] = 'cloudera-cdh-5-0.x86_64.rpm'
+default['hadoop']['package_name'] = 'hadoop-2.6.0.tar.gz'
+default['hadoop']['archive_name'] = 'hadoop-2.6.0.tar.gz'
 default['hadoop']['src'] = '/usr/local/src/'
 default['hadoop']['user'] = 'vagrant'
 default['hadoop']['group'] = 'vagrant'
+default['hadoop']['port'] = 9000 
+default['hadoop']['hdfs_dir_name'] = 'hadoopdata'
+default['hadoop']['home'] = "/home/#{default['hadoop']['user']}/hadoop-2.6.0"
