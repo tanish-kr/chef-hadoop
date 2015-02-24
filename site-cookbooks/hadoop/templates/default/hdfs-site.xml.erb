@@ -24,11 +24,11 @@
 
   <property>
    <name>dfs.name.dir</name>
-   <value>file:///home/<%= node['hadoop']['user'] %>/<%= node['hadoop']['hdfs_dir_name'] %>/hdfs/namenode</value>
+   <value>file:///home/<%= node['hadoop']['user'] %><%= node['hadoop']['hdfs_dir']['namenode'] %></value>
   </property>
 
   <property>
    <name>dfs.data.dir</name>
-   <value>file:///home/<%= node['hadoop']['user'] %>/<%= node['hadoop']['hdfs_dir_name'] %>/hdfs/datanode</value>
+   <value>file:///home/<%= node['hadoop']['user'] %><%= node['hadoop']['hdfs_dir']['datanode'] %></value>
   </property>
 </configuration>
