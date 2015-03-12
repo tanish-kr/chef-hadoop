@@ -59,8 +59,12 @@ end
   hadoop-client
   hadoop-hdfs-namenode
   hadoop-hdfs-datanode
-  hadoop-0.20-mapreduce-jobtracker
+  hadoop-yarn-resourcemanager
+  hadoop-yarn-nodemanager
   hadoop-0.20-mapreduce-tasktracker
+  hadoop-0.20-mapreduce-jobtracker
+  hive
+  pig
 ).each do |package_name|
   package package_name do
     action :install
@@ -125,7 +129,9 @@ bash "hdfs_format" do
   code <<-SHELL
     hdfs namenode -format
   SHELL
+#  not_if "ps aux | grep -q namenode"
 end
+
 # hadoop start
 #
 #  hadoop-yarn-nodemanager
@@ -135,7 +141,6 @@ end
   hadoop-hdfs-namenode
   hadoop-hdfs-secondarynamenode
   hadoop-0.20-mapreduce-tasktracker
-  hadoop-0.20-mapreduce-jobtracker
 ).each do |service_name|
   service service_name do
     action :start
@@ -143,8 +148,24 @@ end
     #supports :start => true, :stop => true, :restart => true
   end
 end
+#
 
+bash "permission_hadoop_fs" do
+  user "hdfs"
+  code <<-SHELL
+    hadoop fs -chmod 777 /
+  SHELL
+end
 
+%W(
+  hadoop-0.20-mapreduce-jobtracker
+  hadoop-yarn-resourcemanager
+  hadoop-yarn-nodemanager
+).each do |service_name|
+  service service_name do
+    action :start
+  end
+end
 
 # 6. set hadoop env
 #bash "set_hadoop_env" do
