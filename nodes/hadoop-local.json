@@ -1,6 +1,6 @@
 {
   "run_list": [
-
+    "hadoop"
   ],
   "automatic": {
     "ipaddress": "hadoop-local"
